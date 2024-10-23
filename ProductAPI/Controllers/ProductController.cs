@@ -21,13 +21,18 @@ namespace ProductAPI.Controllers{
             return _context.Product.ToList();
         }
 
-        // [HttpPost]
-        // public IEnumerable<Product> AddProduct(){
-        //     _context.Products.Add(new Product(){
-        //         Name = "Güzel Seramik Tabak",
-        //         Description = "Şık tasarım, günlük kullanım için ideal"
-        //     });
-        //     return _context.Products.ToArray();
-        // }
+        [HttpPost]
+        public IEnumerable<Product> AddProduct([FromQuery]int id, [FromQuery]int categoryid, [FromQuery]string name, [FromQuery]string description){
+            ProductList.Clear();
+            ProductList.Add(new Product(){
+                Id = id,
+                CategoryId = categoryid,
+                Name = name,
+                Description = description
+            });
+            _context.Product.AddRange(ProductList);
+            _context.SaveChanges();
+            return _context.Product.ToList();
+        }
     }
 }
