@@ -1,35 +1,33 @@
 using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
+using ProductAPI.Data;
 
 namespace ProductAPI.Controllers{
 
     [ApiController]
     [Route("[controller]")]
     public class ProductController : ControllerBase{
-        List<Product> ProductList;
-
-        [HttpGet]
-        public IEnumerable<Product> GetAll(){
-            query();
-            return ProductList;
-        }
-
-        [HttpPost]
-        public IEnumerable<Product> AddProduct(){
-            query();
-            ProductList.Add(new Product(){
-                Id = 0,
-                CategoryId = 1,
-                Name = "Akıllı Saat",
-                Description = "Bu bir saat"
-            });
-            return ProductList;
-        }
-
-        private void query(){
+        private readonly ApplicationDbContext _context;
+        public List<Product> ProductList;
+        public ProductController(ApplicationDbContext context){
             if(ProductList == null){
                 ProductList = new List<Product>();
             }
+            _context = context;
         }
+
+        [HttpGet]
+        public IEnumerable<Product> GetAll(){
+            return _context.Product.ToList();
+        }
+
+        // [HttpPost]
+        // public IEnumerable<Product> AddProduct(){
+        //     _context.Products.Add(new Product(){
+        //         Name = "Güzel Seramik Tabak",
+        //         Description = "Şık tasarım, günlük kullanım için ideal"
+        //     });
+        //     return _context.Products.ToArray();
+        // }
     }
 }
